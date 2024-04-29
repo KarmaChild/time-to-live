@@ -1,7 +1,7 @@
-import {View} from "react-native"
+import {View, Text} from "react-native"
 import {styles} from './item.style'
 
-export const Item = (props: {name: string, date: string}) => {
+export const Item = ( props: {name: string, date: string}) => {
     return (
         <View style={styles.itemContainer}>
             <View style={styles.itemNameContainer}>
