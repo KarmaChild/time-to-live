@@ -1,7 +1,10 @@
-import {View, Text} from "react-native"
-import {styles} from './item.style'
+import {View, Text, StyleSheet} from "react-native"
+import {Dimensions} from 'react-native'
+const windowWidth = Dimensions.get('window').width
+const windowHeight = Dimensions.get('window').height
 
 export const Item = ( props: {name: string, date: string}) => {
+
     return (
         <View style={styles.itemContainer}>
             <View style={styles.itemNameContainer}>
@@ -13,3 +16,31 @@ export const Item = ( props: {name: string, date: string}) => {
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    itemContainer: {
+        flexDirection: 'row',
+        height: 55,
+        width: 390,
+    },
+    itemNameContainer: {
+        position: 'absolute',
+        top: 15,
+        left: 20,
+    },
+    itemName: {
+        fontFamily: 'JosefinSans-Regular',
+        fontSize: 26,
+        color: '#fff',
+    },
+    itemDateContainer: {
+        position: 'absolute',
+        top: 15,
+        right: 35,
+    },
+    itemDate: {
+        fontFamily: 'JosefinSans-Light',
+        fontSize: 24,
+        color: '#fff',
+    },
+})

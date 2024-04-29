@@ -9,10 +9,22 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#3D3E51"
     },
     "assetBundlePatterns": [
       "**/*"
+    ],
+    "plugins": [
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/JosefinSans-Regular.ttf",
+            "./assets/fonts/JosefinSans-Light.ttf"
+          ]
+        }
+      ],
+      "expo-router"
     ],
     "ios": {
       "supportsTablet": true
