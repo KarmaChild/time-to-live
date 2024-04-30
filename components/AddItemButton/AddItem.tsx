@@ -1,24 +1,25 @@
 import {StyleSheet, TouchableOpacity, View} from "react-native"
 import { Image } from 'expo-image'
 import React from "react";
-import {Link} from "react-router-native";
 
-type Props = {
-    onPress: () => void
+type props = {
+    onPress: () => void,
 }
-export const AddItemButton = () => {
+
+export const AddItemButton: React.FC<props> = ({onPress}) => {
+
 
     return (
-        <Link to="/itempage">
+
             <TouchableOpacity style={styles.addItemContainer}
-            >
+                              onPress={onPress}>
                 <View>
                     <Image source={require("../../assets/plus.svg")}
                            style={styles.addItemPlusContainer}
                     />
                 </View>
             </TouchableOpacity>
-        </Link>
+
     )
 }
 
