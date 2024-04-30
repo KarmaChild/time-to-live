@@ -5,6 +5,7 @@ import React, {useCallback, useEffect, useState} from "react"
 import {Dimensions} from 'react-native'
 import {useFonts} from "expo-font"
 import * as SplashScreen from "expo-splash-screen"
+import {StatusBar} from "expo-status-bar";
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -53,7 +54,8 @@ export const Home: React.FC<HomeProps>= ({ navigation }) => {
     }
 
     return (
-        <View onLayout={onLayoutRootView} style={[styles.homeContainer, { backgroundColor: 'black' }]}>
+        <View onLayout={onLayoutRootView} style={styles.homeContainer}>
+            <StatusBar style='light'/>
             <View style={styles.items}>
                 {
                     items.map((item, index) => (

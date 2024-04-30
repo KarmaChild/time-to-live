@@ -1,6 +1,7 @@
 import {View, StyleSheet, Text, TextInput, Dimensions} from "react-native"
 import {useState} from "react"
 import DateTimePickerModal from "react-native-modal-datetime-picker"
+import {SaveDeleteButton} from "../../components/SaveDeleteButton/SaveDeleteButton";
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -34,6 +35,10 @@ export const ItemPage = () => {
                 onConfirm={handleConfirm}
                 onCancel={toggleDatePicker}
             />
+            <View style={styles.saveDelContainer}>
+                <SaveDeleteButton onPress={() => {}} save={true}/>
+                <SaveDeleteButton onPress={() => {}} save={false}/>
+            </View>
         </View>
     )
 }
@@ -77,4 +82,10 @@ const styles = StyleSheet.create({
         color: '#fff',
         left: 10
     },
+    saveDelContainer: {
+        position: 'absolute',
+        flexDirection: 'row',
+        top: 300,
+        left: windowWidth/2 - 45,
+    }
 })
