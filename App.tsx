@@ -21,7 +21,7 @@ export default function App() {
                                   title: "",
                                   headerTransparent: true,
                                   headerBackTitleVisible: false,
-                                  //headerTintColor: '#008080'
+                                  headerTintColor: '#007AFF'
                 }}/>
             </Stack.Navigator>
         </NavigationContainer>

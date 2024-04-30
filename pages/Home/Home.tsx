@@ -3,9 +3,8 @@ import {Item} from "../../components/Item/Item"
 import {AddItemButton} from "../../components/AddItemButton/AddItem"
 import React, {useCallback, useEffect, useState} from "react"
 import {Dimensions} from 'react-native'
-import {useFonts} from "expo-font";
-import * as SplashScreen from "expo-splash-screen";
-import {StatusBar} from "expo-status-bar";
+import {useFonts} from "expo-font"
+import * as SplashScreen from "expo-splash-screen"
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;

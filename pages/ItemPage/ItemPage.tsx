@@ -1,20 +1,39 @@
-import {View, StyleSheet, Text, TextInput} from "react-native";
-import {useState} from "react";
+import {View, StyleSheet, Text, TextInput, Dimensions} from "react-native"
+import {useState} from "react"
+import DateTimePickerModal from "react-native-modal-datetime-picker"
+
+const windowWidth = Dimensions.get('window').width;
 
 export const ItemPage = () => {
     const [name, setName] = useState("")
-    const [date, setDate] = useState("")
+    const [date, setDate] = useState(new Date())
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+    const toggleDatePicker = () => {
+        setDatePickerVisibility(!isDatePickerVisible);
+    }
+
+    const handleConfirm = (date: Date) => {
+        setDate(date)
+        toggleDatePicker();
+    };
 
     return (
         <View style={styles.itemPageContainer}>
             <View style={styles.nameContainer}>
                 <Text style={styles.nameText}>Name</Text>
-                <TextInput style={styles.nameInput} value={name} onChangeText={setName}/>
+                <TextInput style={styles.input} value={name} onChangeText={setName}/>
             </View>
             <View style={styles.dateContainer}>
                 <Text style={styles.dateText}>Date of expiry</Text>
-                <TextInput style={styles.dateInput} value={date} onChangeText={setDate}/>
+                <TextInput style={styles.input} value={date.toDateString()} onFocus={toggleDatePicker}/>
             </View>
+            <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date"
+                onConfirm={handleConfirm}
+                onCancel={toggleDatePicker}
+            />
         </View>
     )
 }
@@ -36,9 +55,9 @@ const styles = StyleSheet.create({
         color: '#fff',
         left: 10
     },
-    nameInput: {
+    input: {
         top: 5,
-        width: 350,
+        width: (0.9 * windowWidth),
         height: 60,
         borderRadius: 15,
         backgroundColor: '#2A2B38',
@@ -57,16 +76,5 @@ const styles = StyleSheet.create({
         fontSize: 26,
         color: '#fff',
         left: 10
-    },
-    dateInput: {
-        top: 5,
-        width: 350,
-        height: 60,
-        borderRadius: 15,
-        backgroundColor: '#2A2B38',
-        fontFamily: 'JosefinSans-Light',
-        fontSize: 26,
-        color: '#fff',
-        padding: 10
     },
 })
