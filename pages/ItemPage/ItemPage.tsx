@@ -2,6 +2,9 @@ import {View, StyleSheet, Text, TextInput, Dimensions} from "react-native"
 import {useState} from "react"
 import DateTimePickerModal from "react-native-modal-datetime-picker"
 import {SaveDeleteButton} from "../../components/SaveDeleteButton/SaveDeleteButton";
+import {AddItemToAsyncStorage} from "../../utils/AsyncStorage/addItemToAsyncStorage";
+import {deleteItemFromAsyncStorage} from "../../utils/AsyncStorage/deleteItemsFromAsyncStorage";
+import {log} from "expo/build/devtools/logger";
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -17,7 +20,17 @@ export const ItemPage = () => {
     const handleConfirm = (date: Date) => {
         setDate(date)
         toggleDatePicker();
-    };
+    }
+
+    const addItem = async () => {
+        await AddItemToAsyncStorage(name, date).then(async () => {
+            console.log(`${name} added to Async Storage`)
+        }).catch(console.error)
+    }
+
+    const deleteItem = async () => {
+        await deleteItemFromAsyncStorage().then(() => console.log('items deleted'))
+    }
 
     return (
         <View style={styles.itemPageContainer}>
@@ -36,8 +49,8 @@ export const ItemPage = () => {
                 onCancel={toggleDatePicker}
             />
             <View style={styles.saveDelContainer}>
-                <SaveDeleteButton onPress={() => {}} save={true}/>
-                <SaveDeleteButton onPress={() => {}} save={false}/>
+                <SaveDeleteButton onPress={addItem} save={true}/>
+                <SaveDeleteButton onPress={deleteItem} save={false}/>
             </View>
         </View>
     )

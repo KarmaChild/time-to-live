@@ -6,11 +6,12 @@ import {Dimensions} from 'react-native'
 import {useFonts} from "expo-font"
 import * as SplashScreen from "expo-splash-screen"
 import {StatusBar} from "expo-status-bar";
+import {getItemsFromAsyncStorage} from "../../utils/AsyncStorage/getItemsFromAsyncStorage";
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const items = [
+const _items = [
     { name: "Hot Chocolate", date: "3 days left" },
     { name: "Garlic Press", date: "14 days left" },
     { name: "Egg boiler", date: "23 days left" },
@@ -28,15 +29,16 @@ export const Home: React.FC<HomeProps>= ({ navigation }) => {
         'JosefinSans-Regular': require('../../assets/fonts/JosefinSans-Regular.ttf'),
         'JosefinSans-Light': require('../../assets/fonts/JosefinSans-Light.ttf'),
     })
+    const [items, setItems] = useState([])
 
     useEffect(() => {
         async function prepare() {
             try {
+                getItemsFromAsyncStorage().then((items) => setItems(items))
                 await new Promise(resolve => setTimeout(resolve, 1000));
             } catch (e) {
                 console.warn(e);
             } finally {
-                // Tell the application to render
                 setAppIsReady(true);
             }
         }
@@ -53,6 +55,7 @@ export const Home: React.FC<HomeProps>= ({ navigation }) => {
         return null;
     }
 
+    console.log('items', items)
     return (
         <View onLayout={onLayoutRootView} style={styles.homeContainer}>
             <StatusBar style='light'/>

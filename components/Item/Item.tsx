@@ -1,7 +1,4 @@
 import {View, Text, StyleSheet} from "react-native"
-import {Dimensions} from 'react-native'
-const windowWidth = Dimensions.get('window').width
-const windowHeight = Dimensions.get('window').height
 
 export const Item = ( props: {name: string, date: string}) => {
 
