@@ -1,21 +1,19 @@
-import {StyleSheet, View} from "react-native"
+import {StyleSheet, Text, View} from "react-native"
 import {Item} from "../../components/Item/Item"
-import {AddItemButton} from "../../components/AddItemButton/AddItem"
+import {AddItemButton} from "../../components/AddItemButton/AddItemButton"
 import React, {useCallback, useEffect, useState} from "react"
 import {Dimensions} from 'react-native'
 import {useFonts} from "expo-font"
 import * as SplashScreen from "expo-splash-screen"
-import {StatusBar} from "expo-status-bar";
-import {getItemsFromAsyncStorage} from "../../utils/AsyncStorage/getItemsFromAsyncStorage";
+import {StatusBar} from "expo-status-bar"
+import {getItemsFromAsyncStorage} from "../../utils/AsyncStorage/getItemsFromAsyncStorage"
+import {getDaysLeft} from "../../utils/Date/getDaysLeft"
+import {useFocusEffect} from "@react-navigation/native"
+import {Image} from "expo-image"
+import {ItemProps} from "../../types/types"
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
-
-const _items = [
-    { name: "Hot Chocolate", date: "3 days left" },
-    { name: "Garlic Press", date: "14 days left" },
-    { name: "Egg boiler", date: "23 days left" },
-]
+const windowWidth = Dimensions.get('window').width
+const windowHeight = Dimensions.get('window').height
 
 type HomeProps = {
     navigation: any
@@ -24,50 +22,91 @@ type HomeProps = {
 SplashScreen.preventAutoHideAsync()
 
 export const Home: React.FC<HomeProps>= ({ navigation }) => {
-    const [appIsReady, setAppIsReady] = useState(false);
+    const [appIsReady, setAppIsReady] = useState(false)
     const [fontsLoaded, fontError] = useFonts({
         'JosefinSans-Regular': require('../../assets/fonts/JosefinSans-Regular.ttf'),
         'JosefinSans-Light': require('../../assets/fonts/JosefinSans-Light.ttf'),
     })
-    const [items, setItems] = useState([])
+    const [items, setItems] = useState<ItemProps[]>([])
+
 
     useEffect(() => {
-        async function prepare() {
+        async function fetchData() {
             try {
-                getItemsFromAsyncStorage().then((items) => setItems(items))
-                await new Promise(resolve => setTimeout(resolve, 1000));
-            } catch (e) {
-                console.warn(e);
-            } finally {
+                const items = await getItemsFromAsyncStorage();
+                setItems(items);
+                await SplashScreen.hideAsync();
                 setAppIsReady(true);
+            } catch (error) {
+                console.warn(error);
             }
         }
-        prepare()
+        fetchData();
     }, [])
+
+    useFocusEffect(
+        useCallback(() => {
+            async function fetchItems() {
+                try {
+                    const items = await getItemsFromAsyncStorage()
+                    setItems(items)
+                } catch (error) {
+                    console.warn(error)
+                }
+            }
+            fetchItems()
+        }, [])
+    )
 
     const onLayoutRootView = useCallback(async () => {
         if (appIsReady && fontsLoaded) {
-            await SplashScreen.hideAsync();
+            await SplashScreen.hideAsync()
         }
-    }, [appIsReady]);
+    }, [appIsReady])
 
     if (!appIsReady) {
-        return null;
+        return null
     }
 
     console.log('items', items)
     return (
         <View onLayout={onLayoutRootView} style={styles.homeContainer}>
             <StatusBar style='light'/>
-            <View style={styles.items}>
-                {
-                    items.map((item, index) => (
-                        <Item key={index} name={item.name} date={item.date}/>
-                    ))
-                }
-            </View>
+            {
+                items.length > 0 ? (
+                    <View style={styles.items}>
+                        {
+                            items.map((item, index) => (
+                                <Item key={index}
+                                      id={item.id || ''}
+                                      name={item.name || ''}
+                                      date={getDaysLeft(new Date(item.date))}
+                                      onPress={() => navigation.navigate('ItemPage',
+                                          {
+                                              id: item.id,
+                                              name: item.name,
+                                              date: item.date,
+                                          })
+                                      }/>
+                            ))
+                        }
+                    </View>
+                ) : (
+                    <View style={styles.noItems}>
+                        <Image source={require("../../assets/sad.svg")} style={styles.saveImg}/>
+                        <Text style={styles.noItemsText}>No items yet, Add items!</Text>
+                    </View>
+                )
+            }
             <View style={styles.AddItem}>
-                <AddItemButton onPress={() => navigation.navigate('ItemPage')}/>
+                <AddItemButton onPress={() => navigation.navigate(
+                    'ItemPage',
+                    {
+                        id: null,
+                        name: null,
+                        date: null,
+                    }
+                    )}/>
             </View>
         </View>
     )
@@ -88,4 +127,18 @@ const styles = StyleSheet.create({
         top: windowHeight-143,
         left: windowWidth-108,
     },
-});
+    noItems: {
+        alignItems: 'center',
+        top: windowHeight/3,
+        left: windowWidth-300,
+    },
+    noItemsText: {
+        fontFamily: 'JosefinSans-Regular',
+        fontSize: 20,
+        color: '#2A2B38',
+    },
+    saveImg: {
+        width: 100,
+        height: 100,
+    }
+})

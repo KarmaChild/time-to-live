@@ -6,16 +6,17 @@ import React from "react";
 type props = {
     onPress: () => void;
     save: boolean
+    disabled: boolean
 }
 
-export const SaveDeleteButton: React.FC<props> = ({onPress, save}) => {
+export const SaveDeleteButton: React.FC<props> = ({onPress, save, disabled}) => {
     return (
         save ? (
-            <TouchableOpacity style={styles.saveContainer} onPress={onPress}>
+            <TouchableOpacity style={[styles.saveContainer, disabled && {display: 'none'}]} onPress={onPress} disabled={disabled}>
                 <Image source={require("../../assets/save.svg")} style={styles.saveImg}/>
             </TouchableOpacity>
         ) : (
-            <TouchableOpacity style={styles.delContainer} onPress={onPress}>
+            <TouchableOpacity style={[styles.delContainer, disabled && {display: 'none'}]} onPress={onPress} disabled={disabled}>
                 <Image source={require("../../assets/delete.svg")} style={styles.delImg}/>
             </TouchableOpacity>
         )

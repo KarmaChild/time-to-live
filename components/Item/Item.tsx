@@ -1,16 +1,19 @@
-import {View, Text, StyleSheet} from "react-native"
+import {View, Text, StyleSheet, TouchableOpacity} from "react-native"
 
-export const Item = ( props: {name: string, date: string}) => {
-
+export const Item = ( props: {id?: string, name: string, date: string, onPress: () => void}) => {
     return (
-        <View style={styles.itemContainer}>
+        <TouchableOpacity style={[
+            styles.itemContainer
+        ]}
+                          onPress={props.onPress}
+        >
             <View style={styles.itemNameContainer}>
                 <Text style={styles.itemName}>{props.name}</Text>
             </View>
             <View style={styles.itemDateContainer}>
                 <Text style={styles.itemDate}>{props.date}</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 

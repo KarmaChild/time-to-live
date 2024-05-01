@@ -1,46 +1,83 @@
-import {View, StyleSheet, Text, TextInput, Dimensions} from "react-native"
-import {useState} from "react"
+import {View, StyleSheet, Text, TextInput, Dimensions, Button, Platform} from "react-native"
+import React, {useState} from "react"
 import DateTimePickerModal from "react-native-modal-datetime-picker"
-import {SaveDeleteButton} from "../../components/SaveDeleteButton/SaveDeleteButton";
-import {AddItemToAsyncStorage} from "../../utils/AsyncStorage/addItemToAsyncStorage";
-import {deleteItemFromAsyncStorage} from "../../utils/AsyncStorage/deleteItemsFromAsyncStorage";
-import {log} from "expo/build/devtools/logger";
+import {SaveDeleteButton} from "../../components/SaveDeleteButton/SaveDeleteButton"
+import {AddItemToAsyncStorage} from "../../utils/AsyncStorage/addItemToAsyncStorage"
+import {deleteItemFromAsyncStorage} from "../../utils/AsyncStorage/deleteItemsFromAsyncStorage"
+import {formatDate} from "../../utils/Date/formatDate"
+import Modal from "react-native-modal"
+import {goBack} from "expo-router/build/global-state/routing";
 
-const windowWidth = Dimensions.get('window').width;
+const windowWidth = Dimensions.get('window').width
 
-export const ItemPage = () => {
-    const [name, setName] = useState("")
-    const [date, setDate] = useState(new Date())
-    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+type props = {
+    id: string
+    name: string
+    date: string
+    route: any
+    navigation: any
+}
 
+export const ItemPage: React.FC<props> = ({ route, navigation}) => {
+    const { id, name, date } = route.params
+    console.log('params', id, name, date )
+    const [_name, setName] = useState(name)
+    const [_date, setDate] = useState(date)
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
+    const [isModalVisible, setModalVisible] = useState(false)
+
+    const deviceWidth = Dimensions.get("window").width;
+    const deviceHeight =Dimensions.get("window").height
+
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+    }
     const toggleDatePicker = () => {
-        setDatePickerVisibility(!isDatePickerVisible);
+        setDatePickerVisibility(!isDatePickerVisible)
     }
 
     const handleConfirm = (date: Date) => {
         setDate(date)
-        toggleDatePicker();
+        toggleDatePicker()
     }
 
     const addItem = async () => {
-        await AddItemToAsyncStorage(name, date).then(async () => {
-            console.log(`${name} added to Async Storage`)
+        await AddItemToAsyncStorage(id || '', _name, _date).then(async () => {
+            console.log(`${_name} added to Async Storage`)
+            navigation.goBack()
         }).catch(console.error)
     }
 
     const deleteItem = async () => {
-        await deleteItemFromAsyncStorage().then(() => console.log('items deleted'))
+        await deleteItemFromAsyncStorage(id).then(() => {
+            console.log('item deleted')
+            navigation.goBack()
+            toggleModal()
+        }).catch(console.error)
     }
 
     return (
         <View style={styles.itemPageContainer}>
+            <Modal
+                isVisible={isModalVisible}
+                deviceWidth={deviceWidth}
+                deviceHeight={deviceHeight}
+            >
+                <View style={styles.modal}>
+                    <Text style={styles.modalText}>Are you sure you want to delete{name ? ` ${_name}?` : `?`}</Text>
+                    <View style={styles.modalButtons}>
+                        <Button title='Yes' onPress={deleteItem}/>
+                        <Button title='No' onPress={toggleModal}/>
+                    </View>
+                </View>
+            </Modal>
             <View style={styles.nameContainer}>
                 <Text style={styles.nameText}>Name</Text>
-                <TextInput style={styles.input} value={name} onChangeText={setName}/>
+                <TextInput style={styles.input} value={_name} onChangeText={setName}/>
             </View>
             <View style={styles.dateContainer}>
                 <Text style={styles.dateText}>Date of expiry</Text>
-                <TextInput style={styles.input} value={date.toDateString()} onFocus={toggleDatePicker}/>
+                <TextInput style={styles.input} value={_date ? formatDate(new Date(_date)) : ""} onFocus={toggleDatePicker}/>
             </View>
             <DateTimePickerModal
                 isVisible={isDatePickerVisible}
@@ -49,8 +86,8 @@ export const ItemPage = () => {
                 onCancel={toggleDatePicker}
             />
             <View style={styles.saveDelContainer}>
-                <SaveDeleteButton onPress={addItem} save={true}/>
-                <SaveDeleteButton onPress={deleteItem} save={false}/>
+                <SaveDeleteButton onPress={addItem} save={true} disabled={_name === '' || _date === null}/>
+                <SaveDeleteButton onPress={toggleModal} save={false} disabled={_name === '' || _date === null}/>
             </View>
         </View>
     )
@@ -100,5 +137,25 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         top: 300,
         left: windowWidth/2 - 45,
-    }
+    },
+    modal: {
+        alignItems: 'center',
+        left: windowWidth - 375,
+        width: 320,
+        height: 200,
+        backgroundColor: "#2A2B38",
+        borderRadius: 8
+    },
+    modalText: {
+        textAlign: 'center',
+        width: "70%",
+        top: 60,
+        fontFamily: 'JosefinSans-Regular',
+        fontSize: 18,
+        color: '#fff',
+    },
+    modalButtons: {
+        top: 70,
+        flexDirection: 'row',
+    },
 })
