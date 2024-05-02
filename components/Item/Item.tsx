@@ -1,4 +1,7 @@
-import {View, Text, StyleSheet, TouchableOpacity} from "react-native"
+import {View, Text, StyleSheet, TouchableOpacity, Dimensions} from "react-native"
+
+
+const windowWidth = Dimensions.get('window').width
 
 export const Item = ( props: {id?: string, name: string, date: string, onPress: () => void}) => {
     return (
@@ -29,8 +32,8 @@ const styles = StyleSheet.create({
         left: 20,
     },
     itemName: {
-        fontFamily: 'JosefinSans-Regular',
-        fontSize: 26,
+        fontFamily: 'Regular',
+        fontSize: 18,
         color: '#fff',
     },
     itemDateContainer: {
@@ -39,8 +42,8 @@ const styles = StyleSheet.create({
         right: 35,
     },
     itemDate: {
-        fontFamily: 'JosefinSans-Light',
-        fontSize: 24,
+        fontFamily: 'Light',
+        fontSize: 16,
         color: '#fff',
     },
 })

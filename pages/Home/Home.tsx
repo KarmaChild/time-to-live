@@ -24,8 +24,8 @@ SplashScreen.preventAutoHideAsync()
 export const Home: React.FC<HomeProps>= ({ navigation }) => {
     const [appIsReady, setAppIsReady] = useState(false)
     const [fontsLoaded, fontError] = useFonts({
-        'JosefinSans-Regular': require('../../assets/fonts/JosefinSans-Regular.ttf'),
-        'JosefinSans-Light': require('../../assets/fonts/JosefinSans-Light.ttf'),
+        'Regular': require('../../assets/fonts/Poppins-Regular.ttf'),
+        'Light': require('../../assets/fonts/Poppins-Light.ttf'),
     })
     const [items, setItems] = useState<ItemProps[]>([])
 
@@ -73,6 +73,9 @@ export const Home: React.FC<HomeProps>= ({ navigation }) => {
         <View onLayout={onLayoutRootView} style={styles.homeContainer}>
             <StatusBar style='light'/>
             {/*<Text style={styles.header}>Home</Text>*/}
+            <View style={styles.headerContainer}>
+                <Image  source={require("../../assets/icon.svg")} style={styles.headerImg}/>
+            </View>
             {
                 items.length > 0 ? (
                     <View style={styles.items}>
@@ -119,10 +122,17 @@ const styles = StyleSheet.create({
         top: 30,
         left: 0,
     },
-    header: {
+    headerContainer: {
         top: 30,
-        left: 20,
-        fontFamily: 'JosefinSans-Regular',
+        width: windowWidth,
+        alignItems: 'center'
+    },
+    headerImg: {
+        width: 50,
+        height: 50
+    },
+    header: {
+        fontFamily: 'Regular',
         fontSize: 30,
         color: '#007AFF',
     },
@@ -141,7 +151,7 @@ const styles = StyleSheet.create({
         left: windowWidth-300,
     },
     noItemsText: {
-        fontFamily: 'JosefinSans-Regular',
+        fontFamily: 'Regular',
         fontSize: 20,
         color: '#2A2B38',
     },

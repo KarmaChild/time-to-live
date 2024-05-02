@@ -1,48 +1,67 @@
-import PushNotification from 'react-native-push-notification'
+import * as Notifications from 'expo-notifications'
 
 const notificationIds: any = {}
 
-export const scheduleExpiryNotification = (itemId: string, itemName: string, expiryDate: Date) => {
-    const expiryTimestamp = expiryDate.getTime();
+export const scheduleExpiryNotification = async (itemId: string, itemName: string, expiryDate: Date) => {
+    const expiryTimestamp = expiryDate.getTime()
     const oneDayNotificationTime = expiryTimestamp - 24 * 60 * 60 * 1000
     const threeDayNotificationTime = expiryTimestamp - 3 * 24 * 60 * 60 * 1000
 
-    const oneDayNotificationId = `${itemId}_one_day`;
-    const threeDayNotificationId = `${itemId}_three_days`;
+    const oneDayNotificationId = `${itemId}_one_day`
+    const threeDayNotificationId = `${itemId}_three_days`
 
-    PushNotification.localNotificationSchedule({
-        id: oneDayNotificationId,
-        message: `${itemName} is expiring today!`,
-        date: new Date(oneDayNotificationTime),
-    })
-    PushNotification.localNotificationSchedule({
-        id: threeDayNotificationId,
-        message: `${itemName} is expiring in 3 days!`,
-        date: new Date(threeDayNotificationTime),
-    })
+    // testing use only
+    const now = new Date();
+    const oneMinuteNotificationTime = now.getTime() + 60 * 1000;
+    const threeMinuteNotificationTime = now.getTime() + 3 * 60 * 1000;
 
-    notificationIds[itemId] = { oneDayNotificationId, threeDayNotificationId };
+    const oneDayNotification = {
+        title: `${itemName} Expiring Soon!`,
+        body: `${itemName} is expiring tomorrow.`,
+        data: { itemId },
+    }
 
-    return {
-        oneDayNotificationId,
-        threeDayNotificationId
-    };
+    const threeDayNotification = {
+        title: `${itemName} Expiry Reminder`,
+        body: `${itemName} is expiring in 3 days.`,
+        data: { itemId },
+    }
+
+    try {
+        await Notifications.scheduleNotificationAsync({
+            content: oneDayNotification,
+            trigger: oneDayNotificationTime,
+        })
+
+        await Notifications.scheduleNotificationAsync({
+            content: threeDayNotification,
+            trigger: threeDayNotificationTime,
+        })
+        
+        notificationIds[itemId] = { oneDayNotificationId, threeDayNotificationId }
+
+        return { oneDayNotificationId, threeDayNotificationId }
+    } catch (error) {
+        console.error('Error scheduling notifications:', error)
+        return null
+    }
 }
 
-export const deleteItem = (itemId: string) => {
-    const { oneDayNotificationId, threeDayNotificationId } = notificationIds[itemId];
+export const deleteItem = async (itemId: string) => {
+    const { oneDayNotificationId, threeDayNotificationId } = notificationIds[itemId] || {}
 
     if (oneDayNotificationId) {
-        PushNotification.cancelLocalNotification(oneDayNotificationId);
+        await Notifications.cancelScheduledNotificationAsync(oneDayNotificationId)
     }
+
     if (threeDayNotificationId) {
-        PushNotification.cancelLocalNotification(threeDayNotificationId);
+        await Notifications.cancelScheduledNotificationAsync(threeDayNotificationId)
     }
 
     delete notificationIds[itemId]
 }
 
-export const editItemExpiry = (itemId: string, itemName: string, newItemExpiryDate: Date) => {
-    deleteItem(itemId)
-    scheduleExpiryNotification(itemId, itemName, newItemExpiryDate)
+export const editItemExpiry = async (itemId: string, itemName: string, newItemExpiryDate: Date) => {
+    await deleteItem(itemId)
+    await scheduleExpiryNotification(itemId, itemName, newItemExpiryDate)
 }

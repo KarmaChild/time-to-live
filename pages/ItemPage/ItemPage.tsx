@@ -6,7 +6,6 @@ import {AddItemToAsyncStorage} from "../../utils/AsyncStorage/addItemToAsyncStor
 import {deleteItemFromAsyncStorage} from "../../utils/AsyncStorage/deleteItemsFromAsyncStorage"
 import {formatDate} from "../../utils/Date/formatDate"
 import Modal from "react-native-modal"
-import {goBack} from "expo-router/build/global-state/routing";
 
 const windowWidth = Dimensions.get('window').width
 
@@ -109,8 +108,8 @@ const styles = StyleSheet.create({
         left: 20,
     },
     nameText: {
-        fontFamily: 'JosefinSans-Regular',
-        fontSize: 26,
+        fontFamily: 'Regular',
+        fontSize: 16,
         color: '#fff',
         left: 10
     },
@@ -120,8 +119,8 @@ const styles = StyleSheet.create({
         height: 60,
         borderRadius: 15,
         backgroundColor: '#2A2B38',
-        fontFamily: 'JosefinSans-Light',
-        fontSize: 26,
+        fontFamily: 'Light',
+        fontSize: 16,
         color: '#fff',
         padding: 10
     },
@@ -131,8 +130,8 @@ const styles = StyleSheet.create({
         left: 20,
     },
     dateText: {
-        fontFamily: 'JosefinSans-Regular',
-        fontSize: 26,
+        fontFamily: 'Regular',
+        fontSize: 16,
         color: '#fff',
         left: 10
     },
@@ -154,7 +153,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         width: "70%",
         top: 60,
-        fontFamily: 'JosefinSans-Regular',
+        fontFamily: 'Regular',
         fontSize: 18,
         color: '#fff',
     },
