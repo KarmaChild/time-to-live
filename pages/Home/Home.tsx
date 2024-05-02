@@ -72,6 +72,7 @@ export const Home: React.FC<HomeProps>= ({ navigation }) => {
     return (
         <View onLayout={onLayoutRootView} style={styles.homeContainer}>
             <StatusBar style='light'/>
+            {/*<Text style={styles.header}>Home</Text>*/}
             {
                 items.length > 0 ? (
                     <View style={styles.items}>
@@ -117,6 +118,13 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 30,
         left: 0,
+    },
+    header: {
+        top: 30,
+        left: 20,
+        fontFamily: 'JosefinSans-Regular',
+        fontSize: 30,
+        color: '#007AFF',
     },
     items: {
         position: 'absolute',

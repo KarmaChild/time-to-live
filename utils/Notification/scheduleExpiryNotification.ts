@@ -2,8 +2,8 @@ import PushNotification from 'react-native-push-notification'
 
 const notificationIds: any = {}
 
-export const scheduleExpiryNotification = (itemId: string, itemName: string, expiryDate: string) => {
-    const expiryTimestamp = new Date(expiryDate).getTime();
+export const scheduleExpiryNotification = (itemId: string, itemName: string, expiryDate: Date) => {
+    const expiryTimestamp = expiryDate.getTime();
     const oneDayNotificationTime = expiryTimestamp - 24 * 60 * 60 * 1000
     const threeDayNotificationTime = expiryTimestamp - 3 * 24 * 60 * 60 * 1000
 
@@ -42,7 +42,7 @@ export const deleteItem = (itemId: string) => {
     delete notificationIds[itemId]
 }
 
-export const editItemExpiry = (itemId: string, itemName: string, newItemExpiryDate: string) => {
+export const editItemExpiry = (itemId: string, itemName: string, newItemExpiryDate: Date) => {
     deleteItem(itemId)
     scheduleExpiryNotification(itemId, itemName, newItemExpiryDate)
 }

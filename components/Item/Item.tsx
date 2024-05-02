@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     },
     itemDateContainer: {
         position: 'absolute',
-        top: 15,
+        top: 20,
         right: 35,
     },
     itemDate: {

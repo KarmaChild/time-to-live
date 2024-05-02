@@ -66,7 +66,9 @@ export const ItemPage: React.FC<props> = ({ route, navigation}) => {
                 <View style={styles.modal}>
                     <Text style={styles.modalText}>Are you sure you want to delete{name ? ` ${_name}?` : `?`}</Text>
                     <View style={styles.modalButtons}>
-                        <Button title='Yes' onPress={deleteItem}/>
+                        <View style={{marginRight: 10}}>
+                            <Button title='Yes' onPress={deleteItem}/>
+                        </View>
                         <Button title='No' onPress={toggleModal}/>
                     </View>
                 </View>
@@ -98,6 +100,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 30,
         left: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     nameContainer: {
         position: 'absolute',
@@ -140,7 +144,7 @@ const styles = StyleSheet.create({
     },
     modal: {
         alignItems: 'center',
-        left: windowWidth - 375,
+        right: 'auto',
         width: 320,
         height: 200,
         backgroundColor: "#2A2B38",
