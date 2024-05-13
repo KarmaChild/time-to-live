@@ -147,8 +147,7 @@ const styles = StyleSheet.create({
     },
     noItems: {
         alignItems: 'center',
-        top: windowHeight/3,
-        left: windowWidth-300,
+        top: windowHeight/4,
     },
     noItemsText: {
         fontFamily: 'Regular',
