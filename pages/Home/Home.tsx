@@ -68,16 +68,9 @@ export const Home: React.FC<HomeProps>= ({ navigation }) => {
         return null
     }
 
-    console.log('items', items)
     return (
         <View onLayout={onLayoutRootView} style={styles.homeContainer}>
             <StatusBar style='light'/>
-            {/*<Text style={styles.header}>Home</Text>
-            <Image  source={require("../../assets/icon.svg")} style={styles.headerImg}/>
-            */}
-            {/*<View style={styles.headerContainer}>
-                <Text style={styles.header}>de-clutter</Text>
-            </View>*/}
             {
                 items.length > 0 ? (
                     <View style={styles.items}>
@@ -150,6 +143,8 @@ const styles = StyleSheet.create({
     noItems: {
         alignItems: 'center',
         top: windowHeight/4,
+        left: windowWidth-300,
+        width: '100%',
     },
     noItemsText: {
         fontFamily: 'Regular',

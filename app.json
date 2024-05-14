@@ -19,8 +19,8 @@
         "expo-font",
         {
           "fonts": [
-            "./assets/fonts/JosefinSans-Regular.ttf",
-            "./assets/fonts/JosefinSans-Light.ttf"
+            "./assets/fonts/Poppins-Regular.ttf",
+            "./assets/fonts/Poppins-Light.ttf"
           ]
         }
       ],
@@ -39,7 +39,8 @@
         "backgroundColor": "#3D3E51"
       },
       "permissions": [
-        "android.permission.SCHEDULE_EXACT_ALARM"
+        "android.permission.SCHEDULE_EXACT_ALARM",
+        "android.permission.RECEIVE_BOOT_COMPLETED"
       ],
       "package": "com.karmachild.timetolive"
     },

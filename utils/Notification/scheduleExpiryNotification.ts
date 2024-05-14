@@ -30,15 +30,16 @@ export const scheduleExpiryNotification = async (itemId: string, itemName: strin
     try {
         await Notifications.scheduleNotificationAsync({
             content: oneDayNotification,
-            trigger: oneDayNotificationTime,
+            trigger: oneMinuteNotificationTime,
         })
 
         await Notifications.scheduleNotificationAsync({
             content: threeDayNotification,
-            trigger: threeDayNotificationTime,
+            trigger: threeMinuteNotificationTime,
         })
-        
+
         notificationIds[itemId] = { oneDayNotificationId, threeDayNotificationId }
+        console.log(`Notifications Scheduled for ${oneMinuteNotificationTime} and ${threeMinuteNotificationTime} minutes.`)
 
         return { oneDayNotificationId, threeDayNotificationId }
     } catch (error) {
